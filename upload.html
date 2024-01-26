@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload</title>
+    <link rel="stylesheet" href="upload.css"> <!-- Link to your CSS file -->
+</head>
+<body background="white">
+
+<div class="upload-container">
+    <h2>Upload Image</h2>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <display type="text" name="username" placeholder="Username" required>
+        <input type="file" name="image" accept="image/*" required>
+                    <button type="submit" name="submit">Upload</button>
+                    <form action="" method="post">
+                        <textarea name="comment" placeholder="Add your comment here"></textarea>
+                        <input type="submit" value="Add Comment">
+
+        
+    </form>
+</div>
+
+</body>
+</html>
