@@ -102,7 +102,7 @@
         $password = "";
         $dbname = "userdata";
 
-        // Create connection
+        // Create connection asd
         $conn = new mysqli($servername, $username, $password, $dbname);
 
         // Check connection
