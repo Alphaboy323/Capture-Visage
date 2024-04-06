@@ -32,14 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uploadMessage = "File is not an image.";
         $uploadOk = 0;
     }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
-        $uploadFile = $uploadDir . basename($_FILES['photo']['name']);
-        if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadFile)) {
-            echo "File uploaded successfully!";
-        } else {
-            echo "Error uploading file.";
-        }
-    }
 
     // Check file size
     if ($_FILES["image"]["size"] > 500000) {
@@ -53,17 +45,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uploadOk = 0;
     }
 
-    // If everything is okay, upload the file and store image path in the database
+    // If everything is okay, upload the file and store image path, category, and orientation in the database
     if ($uploadOk == 1) {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             $imagePath = $targetFile;
+            $category = $_POST['category'];
+            $orientation = $_POST['orientation'];
 
-            $sql = "INSERT INTO imgs (username, image) VALUES (?, ?)";
+            $sql = "INSERT INTO imgs (username, image, category, orientation) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $username, $imagePath);
+            $stmt->bind_param("ssss", $username, $imagePath, $category, $orientation);
 
             if ($stmt->execute()) {
-                $uploadMessage = "The file has been uploaded and the image path has been saved to the database.";
+                $uploadMessage = "The file has been uploaded and the image path, category, and orientation have been saved to the database.";
                 header("Location: profile.php?message=" . urlencode($uploadMessage)); // Redirect to profile page with message
                 exit();
             } else {
@@ -77,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,6 +112,10 @@ $conn->close();
             padding: 8px;
             border-radius: 5px;
         }
+
+        .error-message {
+            color: red;
+        }
     </style>
 </head>
 <body background="white">
@@ -137,13 +134,67 @@ $conn->close();
 
 <div class="upload-container">
     <h2>Upload Image</h2>
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        <display type="text" name="username" placeholder="Username" value="<?php echo htmlspecialchars($username); ?>" required>
+    <form action="upload.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
         <input type="file" name="image" accept="image/*" required>
+        <select name="category">
+            <option value="Portrait Photography">Portrait Photography</option>
+            <option value="Landscape Photography">Landscape Photography</option>
+            <option value="Street Photography">Street Photography</option>
+            <option value="Wildlife Photography">Wildlife Photography</option>
+            <option value="Macro Photography">Macro Photography</option>
+            <option value="Fashion Photography">Fashion Photography</option>
+            <option value="Event Photography">Event Photography</option>
+            <option value="Architectural Photography">Architectural Photography</option>
+            <option value="Travel Photography">Travel Photography</option>
+            <option value="Documentary Photography">Documentary Photography</option>
+            <!-- Add more categories if needed -->
+        </select>
+        <select name="orientation">
+            <option value="landscape">Landscape</option>
+            <option value="portrait">Portrait</option>
+            <!-- Add more orientations if needed -->
+        </select>
         <button type="submit" name="submit">Upload</button>
+        <div class="error-message" id="error-message"></div>
     </form>
-    <div><?php echo $uploadMessage; ?></div>
 </div>
+<script>
+    function validateForm() {
+        var fileInput = document.querySelector('input[type="file"]');
+        var errorMessage = document.getElementById('error-message');
+
+        // Check file type
+        var allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        if (!allowedTypes.includes(fileInput.files[0].type)) {
+            errorMessage.textContent = "Only JPEG, JPG, and PNG file types are allowed.";
+            return false;
+        }
+
+        // Check file size (in bytes)
+        var maxSize = 5000000; // Adjust as needed
+        if (fileInput.files[0].size > maxSize) {
+            errorMessage.textContent = "File size exceeds the maximum allowed size.";
+            return false;
+        }
+
+        // Check image resolution (example: width and height both should be at least 100 pixels)
+        var minWidth = 100;
+        var minHeight = 100;
+        var img = new Image();
+        img.src = URL.createObjectURL(fileInput.files[0]);
+        img.onload = function() {
+            if (img.width < minWidth || img.height < minHeight) {
+                errorMessage.textContent = "Image resolution should be at least " + minWidth + "x" + minHeight + " pixels.";
+            } else {
+                errorMessage.textContent = "";
+            }
+        };
+
+        return true;
+    }
+</script>
+
+
 <a class="profile-button" href="profile.php">Profile</a>
 </body>
 </html>

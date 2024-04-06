@@ -4,6 +4,54 @@
     <meta charset="UTF-8">
     <title>Registration Form</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script>
+        function validateForm() {
+            var username = document.forms["registrationForm"]["username"].value;
+            var email = document.forms["registrationForm"]["email"].value;
+            var password = document.forms["registrationForm"]["password"].value;
+            var phone = document.forms["registrationForm"]["phone"].value;
+
+            if (phone !== "" && !/^\d{10}$/.test(phone)) {
+                alert("Please enter a valid 10-digit phone number");
+                return false;
+            }
+
+
+            if (username == "") {
+                alert("Username must be filled out");
+                return false;
+            }
+
+            // Username conventions check
+            if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                alert("Username can only contain letters, numbers, and underscores");
+                return false;
+            }
+
+            if (email == "") {
+                alert("Email must be filled out");
+                return false;
+            }
+
+            if (password == "") {
+                alert("Password must be filled out");
+                return false;
+            }
+
+            // Password conventions check
+            if (password.length < 8) {
+                alert("Password must be at least 8 characters long");
+                return false;
+            }
+
+            if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[@#$%^&*]/.test(password)) {
+                alert("Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="top-bar">
@@ -11,12 +59,14 @@
 </div>
 
 <div class="container">
-    <form action="register.php" method="POST" class="register-form">
+    <form name="registrationForm" action="register.php" method="POST" class="register-form" onsubmit="return validateForm()">
         <h2 class="registration-header">NEW REGISTRATION</h2> <!-- Added class -->
         <input type="text" name="username" placeholder="Username" required>
         <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="phone" placeholder="Phone Number">
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Register</button>
+        <a href="login.html" style="color: goldenrod;">Already registered? Log in</a>
     </form>
 </div>
 

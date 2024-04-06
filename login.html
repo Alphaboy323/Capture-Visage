@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <title>Login Form</title>
     <link rel="stylesheet" href="styles2.css"> <!-- Link to your CSS file -->
+    <script>
+        function validateForm() {
+            var username_or_email = document.forms["loginForm"]["username_or_email"].value;
+            var password = document.forms["loginForm"]["password"].value;
+
+            if (username_or_email == "" || password == "") {
+                alert("Please enter username/email and password.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
 
@@ -11,15 +24,13 @@
     <h1>Capture Visage</h1>
 </div>
 
-<form action="login2.php" method="POST" class="login-form">
+<form name="loginForm" action="login2.php" method="POST" class="login-form" onsubmit="return validateForm()">
     <h2 class="registration-header">~WELCOME BACK~</h2>
-    <input type="text" name="username" placeholder="Username" required>
+    <input type="text" name="username_or_email" placeholder="Username or Email" required>
     <input type="password" name="password" placeholder="Password" required>
     <button type="submit">Login</button>
+    <a href="register.html" style="color: goldenrod;">Not registered? Register here</a>
 </form>
-
-<!-- Button to go to admin dashboard -->
-<a href="admin_dashboard.php" class="admin-dashboard-button">Go to Admin Dashboard</a>
 
 </body>
 </html>

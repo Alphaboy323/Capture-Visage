@@ -61,17 +61,19 @@
             text-align: center;
             margin-top: 20px;
             font-family: 'Arial', sans-serif;
+            
         }
 
         .delete-link {
             display: inline-block;
             padding: 15px 30px;
             background-color: red; /* Change color as needed */
-            color: white;
+            color: black;
             text-decoration: none;
             border-radius: 5px;
             font-size: 18px;
             font-weight: bold;
+            background-color: goldenrod;
         }
 
         .home-link {
@@ -149,7 +151,7 @@
 </div>
 
 <div class="delete-button">
-    <a class="delete-link" href="remove.php">Delete Photos</a>
+    <a class="delete-link" href="remove.php">Update Profile</a>
 </div>
 
 <div class="home-link">
