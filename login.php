@@ -40,7 +40,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            padding: 50px 20px 20px;
+            padding: 100px 20px 20px;
             position: relative; /* Set the container as relative for z-index */
         }
 
@@ -151,26 +151,31 @@
 
 <a class="profile-button" href="profile.php">Profile</a>
 
+
 <script>
     const images = document.querySelectorAll('.image-container img');
-    images.forEach(image => {
-        image.addEventListener('mouseover', () => {
-            images.forEach(otherImage => {
-                if (otherImage !== image) {
-                    otherImage.style.transform = 'scale(0.8)';
-                    otherImage.style.zIndex = '0'; // Move shrinking images behind
-                }
-            });
-            image.style.transform = 'scale(2)';
-            image.style.zIndex = '2'; // Bring hovered image to the front
+images.forEach(image => {
+    image.addEventListener('mouseover', () => {
+        images.forEach(otherImage => {
+            if (otherImage !== image) {
+                otherImage.style.transform = 'scale(0.9)';
+                otherImage.style.zIndex = '0'; // Move shrinking images behind
+                otherImage.style.opacity = '0.5'; // Set transparency to 50%
+            }
         });
-        image.addEventListener('mouseout', () => {
-            images.forEach(img => {
-                img.style.transform = 'scale(1)';
-                img.style.zIndex = '1'; // Reset z-index on mouseout
-            });
+        image.style.transform = 'scale(1.5)';
+        image.style.zIndex = '2'; // Bring hovered image to the front
+        image.style.opacity = '1'; // Reset opacity
+    });
+    image.addEventListener('mouseout', () => {
+        images.forEach(img => {
+            img.style.transform = 'scale(1)';
+            img.style.zIndex = '1'; // Reset z-index on mouseout
+            img.style.opacity = '1'; // Reset opacity
         });
     });
+});
+
 </script>
 
 </body>
